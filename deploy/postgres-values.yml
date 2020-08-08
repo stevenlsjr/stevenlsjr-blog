@@ -1,0 +1,18 @@
+global:
+  storageClass: nfs-client
+  postgresql:
+    existingSecret: postgres-secrets  
+image:
+  repository: stevenlsjr/postgres
+  tag: '12'
+  pullPolicy: IfNotPresent
+postgresqlDataDir: /data/pgdata
+persistence:
+  mountPath: /data/
+securityContext:
+  enabled: true
+  fsGroup: 1000
+  runAsUser: 1000
+volumePermissions:
+  image:
+    repository: debian
