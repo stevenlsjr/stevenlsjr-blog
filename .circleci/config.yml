@@ -1,13 +1,4 @@
 version: "2.1"
-commands:
-  install_buildx:
-    description: setup docker buildx
-    steps:
-      - run: apk add make curl
-      - run: mkdir -vp ~/.docker/cli-plugins/
-      - run: curl --silent -L --output ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.3.1/buildx-v0.3.1.linux-amd64
-      - run: chmod a+x ~/.docker/cli-plugins/docker-buildx
-      - run: docker buildx create multi-builder --use
 workflows:
   build:
     jobs:
@@ -17,21 +8,25 @@ workflows:
 jobs:
   build-images:
     docker:
-      - image: docker:stable
+      - image: stevenlsjr/docker:latest
     steps:
       - checkout # check out the code in the project directory
       - setup_remote_docker:
           version: '19.03.12'
-      - install_buildx
       - run:
           name: Docker login
           command: |
              echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
+      - run: |
+         docker buildx create cicontext --use \
+          --driver docker-container \
+          --driver-opt image=moby/buildkit:master,network=host
       - run:
           name: Build server
           command: |
             docker buildx build \
               -t stevenlsjr/blog-server:latest    \
               --platform=linux/amd64,linux/arm64  \
+              --push                              \
               -f deploy/blog-server.dockerfile    \
               .
