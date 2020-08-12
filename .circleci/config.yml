@@ -8,8 +8,14 @@ commands:
       - run: curl --silent -L --output ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.3.1/buildx-v0.3.1.linux-amd64
       - run: chmod a+x ~/.docker/cli-plugins/docker-buildx
       - run: docker buildx version
-jobs:
+workflows:
   build:
+    jobs:
+      - build-images:
+          context: "steve's context"
+
+jobs:
+  build-images:
     docker:
       - image: docker:stable
     steps:
@@ -20,5 +26,5 @@ jobs:
       - run:
           name: Docker login
           command: |
-             echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+             echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USER --password-stdin
       
