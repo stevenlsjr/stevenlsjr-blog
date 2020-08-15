@@ -1,8 +1,8 @@
-FROM node:lts as BUILD
-WORKDIR /build
-RUN chown -R 1000:1000 /build/
-RUN yarn global add lerna
-# USER 1000
-ADD . ./
-RUN yarn --ignore-engines --verbose --non-interactive
-RUN yarn workspace @stevenlsjr/blog-server build
+FROM pypy:3-buster
+WORKDIR app
+ADD Pipfile Pipfile.lock ./
+RUN pip install pipenv && \
+  pipenv install --system
+
+ADD ./ /app/
+RUN rm -fr packages yarn.lock package.json

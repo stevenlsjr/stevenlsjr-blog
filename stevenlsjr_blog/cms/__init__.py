@@ -1,0 +1,1 @@
+default_app_config = 'stevenlsjr_blog.cms.apps.StevenlsjrCmsConfig'

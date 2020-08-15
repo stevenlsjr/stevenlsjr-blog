@@ -3,3 +3,5 @@ deploy/*
 node_modules/*
 packages/**/node_modules/*
 circleci/*
+/.env
+/secret.json
