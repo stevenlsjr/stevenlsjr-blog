@@ -16,15 +16,7 @@ stevenlsjr/postgres:
 		$(TMPDIR) $(BUILDX_OUTPUT)
 	rm -fr $(TMPDIR)
 
-stevenlsjr/blog-build:
-	docker buildx build \
-		-t stevenlsjr/blog-build:latest \
-		-f blog-build.dockerfile \
-		$(BUILDX_FLAGS) \
-		..	\
-		$(BUILDX_OUTPUT)
-
-stevenlsjr/blog-server: stevenlsjr/blog-build
+stevenlsjr/blog-server:
 	docker buildx build \
 		-t stevenlsjr/blog-server:latest \
 		-f blog-server.dockerfile \
