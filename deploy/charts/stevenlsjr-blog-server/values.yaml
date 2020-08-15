@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: stevenlsjr/blog-server
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -35,6 +35,13 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+
+blogServer:
+  envFrom:
+  - secretRef:
+      name: stevenlsjr-blog
+  env: []
+  envFrom:
 
 service:
   type: ClusterIP
@@ -77,3 +84,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+autoMigrate: false

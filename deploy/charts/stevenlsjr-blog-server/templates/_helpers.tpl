@@ -61,3 +61,11 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{- define "stevenlsjr-blog-server.envMapping"-}}
+envFrom:
+  {{- toYaml .Values.blogServer.envFrom | nindent 2 }}
+env:
+  {{- toYaml .Values.blogServer.env | nindent 2 }}
+{{- end }}

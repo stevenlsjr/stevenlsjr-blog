@@ -6,9 +6,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -18,16 +18,30 @@ jobs:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-    - name: Docker Buildx
-      uses: crazy-max/ghaction-docker-buildx@v3.2.0
-      with: {}
-    - name: Run Buildx
-      run: |
-          docker buildx build \
-            --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm6  \
-            --output "type=image,push=true" \
-            --file ./deploy/blog-server.dockerfile -t stevenlsjr/blog-server:${{ github.sha }}
-   
+    jobs:
+      build-server:
+        steps:
+          # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+          - uses: actions/checkout@v2
+          - name: Docker Buildx
+            uses: crazy-max/ghaction-docker-buildx@v3.2.0
+            with: {}
+          - name: Run Buildx
+            run: |
+              docker buildx build \
+                --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm6  \
+                --output "type=image,push=true" \
+                --file ./deploy/blog-server.dockerfile -t stevenlsjr/blog-server:${{ github.sha }}
+      build-staticfiles:
+        steps:
+          - uses: actions/checkout@v2
+          - name: Docker Buildx
+            uses: crazy-max/ghaction-docker-buildx@v3.2.0
+            with: {}
+          - name: Run Buildx
+            run: |
+              docker buildx build \
+                --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm6  \
+                --output "type=image,push=true" \
+                --file ./deploy/blog-server.dockerfile -t stevenlsjr/blog-server:${{ github.sha }} \
+                --target staticfiles

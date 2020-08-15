@@ -256,3 +256,5 @@ cython_debug/
 
 /secrets.json
 /.env
+.static/*
+.media/*
