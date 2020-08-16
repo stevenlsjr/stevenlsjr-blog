@@ -1,18 +1,25 @@
 import graphene
+from graphene import ObjectType, relay
 from graphene_django import DjangoObjectType
-from stevenlsjr_blog.cms.models import BlogPage, BlogIndexPage
+from graphene_django.filter import DjangoFilterConnectionField
 
-class ArticleType(DjangoObjectType):
+from stevenlsjr_blog.cms.models import BlogIndexPage, BlogPage
+
+
+class BlogPageNode(DjangoObjectType):
     class Meta:
         model = BlogPage
-        only_fields = ['id', 'title', 'date', 'intro', 'body']
+        only_fields = ['id', 'title', 'slug', 'date', 'intro', 'body', 'path', 'depth']
+        filter_fields=['id', 'title', 'slug', 'intro', 'path', 'depth']
+        interfaces = (relay.Node, )
 
+    def get_queryset(cls, queryset, info):
+        return queryset.filter(live=True)
 
 class Query(graphene.ObjectType):
-    blog_pages = graphene.List(ArticleType)
+    blog_pages = relay.Node.Field(BlogPageNode)
+    all_blog_pages = DjangoFilterConnectionField(BlogPageNode)
 
-    @graphene.resolve_only_args
-    def resolve_blog_pages(self):
-        return BlogPage.objects.live()
+
 
 schema = graphene.Schema(query=Query)

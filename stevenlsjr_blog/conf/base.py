@@ -46,6 +46,8 @@ class BaseConfig(Configuration):
         
         "graphene_django",
         # "channels",
+        'wagtail.api.v2',
+        'rest_framework'
     ]
 
     MIDDLEWARE = [

@@ -1,9 +1,13 @@
 FROM python:3.8 AS base
 WORKDIR /app
 ADD Pipfile Pipfile.lock ./
+RUN apt update && \
+  apt install -y libffi-dev libssl-dev build-essential \
+  libzmq3-dev && \ 
+  pip install pipenv pipfile-requirements
 RUN \
-  pip install pipenv && echo pipenv installed && \
-  pipenv install --system --verbose && echo dependencies installed && \
+  pipfile2req -d > _requirements.txt && \
+  pip install -r _requirements.txt  --verbose && echo dependencies installed && \
   mkdir -p /var/www/static/ && \
   chown -R 1000:1000 /app /var/www/static && echo created staticfiles folder
 
