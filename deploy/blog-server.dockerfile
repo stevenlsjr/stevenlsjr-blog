@@ -13,13 +13,14 @@ RUN \
   cat _requirements_dev.txt _requirements_prod.txt > _requirements.txt
 RUN \
   pip install -r _requirements.txt  --verbose && echo dependencies installed && \
-  mkdir -p /var/www/static/ && \
+  mkdir -p /var/www/static/ .media .static && \
   chown -R 1000:1000 /app /var/www/static && echo created staticfiles folder
 
-ADD ./stevenlsjr_blog ./tox.ini ./manage.py /app/
-ENV STATIC_ROOT=/var/www/static/
+ADD ./tox.ini ./manage.py /app/
+ADD ./stevenlsjr_blog/ /app/stevenlsjr_blog/
+ENV DJANGO_STATIC_ROOT=/var/www/static/
 ENV DJANGO_CONFIGURATION=Develop
-RUN python manage.py collectstatic
+RUN DJANGO_SECRET_KEY=changeme python manage.py collectstatic
 
 FROM nginx:1 as staticfiles
 COPY --from=base /var/www/static /var/www/static
