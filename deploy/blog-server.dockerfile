@@ -4,7 +4,7 @@ ADD Pipfile Pipfile.lock ./
 # install apt-get dependencies
 # note, we're installing cryptography from .deb instead of pip
 RUN apt update && \
-  apt install -y libffi-dev libssl-dev build-essential \
+  apt install -y libffi-dev libssl-dev build-essential python3-cryptography \
   libzmq3-dev && \ 
   pip install pipenv pipfile-requirements
 RUN \
@@ -18,6 +18,7 @@ RUN \
 
 ADD ./stevenlsjr_blog ./tox.ini ./manage.py /app/
 ENV STATIC_ROOT=/var/www/static/
+ENV DJANGO_CONFIGURATION=Develop
 RUN python manage.py collectstatic
 
 FROM nginx:1 as staticfiles
