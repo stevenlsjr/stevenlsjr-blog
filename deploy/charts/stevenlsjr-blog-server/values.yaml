@@ -38,17 +38,17 @@ securityContext: {}
 
 blogServer:
   envFrom:
-  - secretRef:
-      name: stevenlsjr-blog
+    - secretRef:
+        name: stevenlsjr-blog
   env: []
-  envFrom:
+ 
+staticfiles:
+  enabled: true
   image:
-    repository: stevenlsjr/blog-server
+    repository: stevenlsjr/blog-staticfiles
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
-staticfiles:
-  enabled: true
 
 service:
   type: ClusterIP

@@ -2,16 +2,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "stevenlsjr-blog-server.fullname" . }}
+  name: {{ include "stevenlsjr-blog-server.staticfilesFullName" . }}
   labels:
-    {{- include "stevenlsjr-blog-server.labels" . | nindent 4 }}
+    {{- include "stevenlsjr-blog-server.staticfilesLabels" . | nindent 4 }}
 spec:
 {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
 {{- end }}
   selector:
     matchLabels:
-      {{- include "stevenlsjr-blog-server.selectorLabels" . | nindent 6 }}
+      {{- include "stevenlsjr-blog-server.staticfilesSelectorLabels" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "stevenlsjr-blog-server.selectorLabels" . | nindent 8 }}
+        {{- include "stevenlsjr-blog-server.staticfilesSelectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -48,7 +48,6 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- include "stevenlsjr-blog-server.envMapping" | toYaml | nindent 10}}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

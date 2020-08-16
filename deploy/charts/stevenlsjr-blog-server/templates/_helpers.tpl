@@ -6,6 +6,10 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "stevenlsjr-blog-server.staticfilesName" -}}
+{{- include "stevenlsjr-blog-server.name" . -}}-staticfiles
+{{- end }}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
@@ -24,6 +28,9 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+{{- define "stevenlsjr-blog-server.staticfilesFullName" -}}
+{{- include "stevenlsjr-blog-server.name" . -}}-staticfiles
+{{- end }}
 {{/*
 Create chart name and version as used by the chart label.
 */}}
@@ -43,11 +50,25 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
+{{- define "stevenlsjr-blog-server.staticfilesLabels" -}}
+helm.sh/chart: {{ include "stevenlsjr-blog-server.chart" . }}
+{{ include "stevenlsjr-blog-server.staticfilesSelectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
 {{/*
 Selector labels
 */}}
 {{- define "stevenlsjr-blog-server.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "stevenlsjr-blog-server.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "stevenlsjr-blog-server.staticfilesSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "stevenlsjr-blog-server.staticfilesName" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -63,9 +84,14 @@ Create the name of the service account to use
 {{- end }}
 
 
-{{- define "stevenlsjr-blog-server.envMapping"-}}
+{{- define "stevenlsjr-blog-server.envMapping" }}
+# {{ .Values.blogServer | toJson }}
 envFrom:
-  {{- toYaml .Values.blogServer.envFrom | nindent 2 }}
+{{- with .Values.blogServer.envFrom }}
+  {{- toYaml .  | nindent 2 }}
+{{- end }}
 env:
-  {{- toYaml .Values.blogServer.env | nindent 2 }}
+{{- with .Values.blogServer.env  }}
+  {{- toYaml . | nindent 2 }}
+{{- end -}}
 {{- end }}
