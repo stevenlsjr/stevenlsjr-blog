@@ -31,7 +31,7 @@ jobs:
       - name: Run Buildx
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm/v7,linux/arm64  \
+            --platform=linux/amd64,linux/arm/v7,linux/arm64  \
             --output "type=image,push=true" \
             --file ./deploy/blog-server.dockerfile \
             -t stevenlsjr/blog-server:${{ github.sha }} \
@@ -53,7 +53,7 @@ jobs:
       - name: Run Buildx
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm/v7,linux/arm64  \
+            --platform=linux/amd64,linux/arm/v7,linux/arm64  \
             --output "type=image,push=true" \
             --file ./deploy/blog-server.dockerfile \
             -t stevenlsjr/blog-staticfiles:${{ github.sha }} \
