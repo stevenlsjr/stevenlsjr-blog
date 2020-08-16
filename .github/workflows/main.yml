@@ -33,7 +33,9 @@ jobs:
           docker buildx build \
             --platform linux/amd64,linux/arm/v7,linux/arm64  \
             --output "type=image,push=true" \
-            --file ./deploy/blog-server.dockerfile -t stevenlsjr/blog-server:${{ github.sha }} \
+            --file ./deploy/blog-server.dockerfile \
+            -t stevenlsjr/blog-server:${{ github.sha }} \
+            -t stevenlsjr/blog-server:latest \
             ./
   build-staticfiles:
     runs-on: ubuntu-latest
@@ -53,7 +55,9 @@ jobs:
           docker buildx build \
             --platform linux/amd64,linux/arm/v7,linux/arm64  \
             --output "type=image,push=true" \
-            --file ./deploy/blog-server.dockerfile -t stevenlsjr/blog-server:${{ github.sha }} \
+            --file ./deploy/blog-server.dockerfile \
+            -t stevenlsjr/blog-staticfiles:${{ github.sha }} \
+            -t stevenlsjr/blog-staticfiles:latest \
             --target staticfiles \
             ./
 
