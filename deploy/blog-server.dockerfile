@@ -18,13 +18,11 @@ RUN \
 
 ADD ./tox.ini ./manage.py /app/
 ADD ./stevenlsjr_blog/ /app/stevenlsjr_blog/
-ENV DJANGO_STATIC_ROOT=/var/www/static/
 ENV DJANGO_CONFIGURATION=Develop
-RUN DJANGO_SECRET_KEY=changeme python manage.py collectstatic
+RUN DJANGO_STATIC_ROOT=/var/www/static/ DJANGO_SECRET_KEY=changeme python manage.py collectstatic
 
 FROM nginx:1 as staticfiles
 COPY --from=base /var/www/static /var/www/static
 COPY deploy/staticfiles.nginx.conf /etc/nginx/templates/default.conf.template
 
 FROM base AS runtime
-ENV DJANGO_STATIC_ROOT=
