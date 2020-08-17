@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "stevenlsjr-blog-server.staticfilesFullName" . }}
+  name: {{ include "stevenlsjr-blog-server.fullname" . }}-staticfiles
   labels:
     {{- include "stevenlsjr-blog-server.staticfilesLabels" . | nindent 4 }}
 spec:
