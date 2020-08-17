@@ -27,4 +27,4 @@ COPY --from=base /var/www/static /var/www/static
 COPY deploy/staticfiles.nginx.conf /etc/nginx/templates/default.conf.template
 
 FROM base AS runtime
-RUN rm -fr /var/www/static/
+ENV DJANGO_STATIC_ROOT=
