@@ -26,3 +26,6 @@ COPY --from=base /var/www/static /var/www/static
 COPY deploy/staticfiles.nginx.conf /etc/nginx/templates/default.conf.template
 
 FROM base AS runtime
+USER 1000
+# gunicorn stevenlsjr.asgi:app -w 4 -k uvicorn.workers.UvicornWorker
+CMD ["gunicorn", "stevenlsjr.asgi:application", "-w", "4", "-k", "uvicorn.workers.UvicornWorker"]

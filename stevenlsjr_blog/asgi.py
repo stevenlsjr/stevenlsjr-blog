@@ -10,7 +10,9 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/asgi/
 import os
 
 from django.core.asgi import get_asgi_application
-
+from configurations import importer
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stevenlsjr_blog.settings')
+os.environ.setdefault('DJANGO_CONFIGURATION', 'BaseConfig')
 
+importer.install()
 application = get_asgi_application()
