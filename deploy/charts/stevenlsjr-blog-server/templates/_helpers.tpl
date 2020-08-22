@@ -94,3 +94,17 @@ env:
   {{- toYaml . | nindent 2 }}
 {{- end -}}
 {{- end }}
+
+{{- define "stevenlsjr-blog-server.staticfilesEnvMapping" }}
+# {{ .Values.blogServer | toJson }}
+envFrom:
+{{- with .Values.blogServer.envFrom }}
+  {{- toYaml .  | nindent 2 }}
+{{- end }}
+env:
+  - name: NGINX_PORT
+    value: 80
+{{- with .Values.blogServer.env  }}
+  {{- toYaml . | nindent 2 }}
+{{- end -}}
+{{- end }}
