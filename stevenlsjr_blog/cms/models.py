@@ -1,8 +1,10 @@
 from django.db import models
 
+from wagtail.core import blocks, fields
 # Create your models here.
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
+
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.search import index
 
@@ -15,10 +17,20 @@ class BlogIndexPage(Page):
     ]
 
 
+DEFAULT_BLOCK_TYPES = [
+    ('rich_text', blocks.RichTextBlock()),
+    ('heading', blocks.CharBlock())
+]
+from wagtail.api import APIField
+
 class BlogPage(Page):
-    date = models.DateField("Post date")
     intro = models.CharField(max_length=250)
-    body = RichTextField(blank=True)
+    body = fields.StreamField(DEFAULT_BLOCK_TYPES)
+
+    api_fields = [
+        APIField('intro'),
+        APIField('body')
+    ]
 
     search_fields = Page.search_fields + [
         index.SearchField('intro'),
@@ -26,7 +38,6 @@ class BlogPage(Page):
     ]
 
     content_panels = Page.content_panels + [
-        FieldPanel('date'),
         FieldPanel('intro'),
         FieldPanel('body', classname="full"),
     ]

@@ -27,6 +27,7 @@ class BaseConfig(Configuration):
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
+        'corsheaders',
         'wagtail.contrib.forms',
         'wagtail.contrib.redirects',
         'wagtail.embeds',
@@ -60,6 +61,7 @@ class BaseConfig(Configuration):
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
+        'corsheaders.middleware.CorsMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -71,6 +73,8 @@ class BaseConfig(Configuration):
     ROOT_URLCONF = 'stevenlsjr_blog.urls'
     WAGTAIL_SITE_NAME = 'Stevenlsjr Blog'
 
+    CORS_ORIGIN_WHITELIST = values.ListValue(default=[])
+    CORS_ORIGIN_ALLOW_ALL = values.BooleanValue(default=False)
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
