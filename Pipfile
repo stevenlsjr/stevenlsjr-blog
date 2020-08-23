@@ -20,7 +20,8 @@ Faker = "*"
 factory-boy = "*"
 djangorestframework = "*"
 markdown = "*"
-django-filter = "*"
+django-filter = ">=2"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 yapf = "*"

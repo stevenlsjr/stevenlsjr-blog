@@ -1,0 +1,62 @@
+schema {
+  query: Query
+}
+
+type BlogPageNode implements Node {
+  id: ID!
+  title: String!
+  slug: String!
+  path: String!
+  depth: Int!
+  date: Date!
+  intro: String!
+  body: String!
+}
+
+type BlogPageNodeConnection {
+  pageInfo: PageInfo!
+  edges: [BlogPageNodeEdge]!
+}
+
+type BlogPageNodeEdge {
+  node: BlogPageNode
+  cursor: String!
+}
+
+scalar Date
+
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Query {
+  blogPages(id: ID!): BlogPageNode
+  allBlogPages(before: String, after: String, first: Int, last: Int, id: ID, title: String, slug: String, intro: String, path: String, path_Iexact: String, path_Istartswith: String, depth: Int, depth_Gt: Int, depth_Gte: Int): BlogPageNodeConnection
+  pages(id: ID!): WagtailPageNode
+  allPages(before: String, after: String, first: Int, last: Int, id: ID, contentType: ID, title: String, title_Iexact: String, title_Icontains: String, title_Contains: String, slug: String, showInMenus: Boolean): WagtailPageNodeConnection
+}
+
+type WagtailPageNode implements Node {
+  id: ID!
+  title: String!
+  slug: String!
+  seoTitle: String!
+  showInMenus: Boolean!
+}
+
+type WagtailPageNodeConnection {
+  pageInfo: PageInfo!
+  edges: [WagtailPageNodeEdge]!
+}
+
+type WagtailPageNodeEdge {
+  node: WagtailPageNode
+  cursor: String!
+}

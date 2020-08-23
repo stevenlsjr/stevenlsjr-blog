@@ -12,14 +12,12 @@ class BaseConfig(Configuration):
 
     # Build paths inside the project like this: BASE_DIR / 'subdir'.
     BASE_DIR = (Path(__file__).parent / '../..').resolve(strict=True)
-    print(BASE_DIR)
 
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-
     ALLOWED_HOSTS = []
-
+    AUTH_USER_MODEL = 'stevenlsjr_auth.User'
     # Application definition
 
     INSTALLED_APPS = [
@@ -42,14 +40,23 @@ class BaseConfig(Configuration):
         'wagtail.core',
         'modelcluster',
         'taggit',
-        'stevenlsjr_blog.cms',
-        
-        "graphene_django",
-        # "channels",
         'wagtail.api.v2',
-        'rest_framework'
+        'rest_framework',
+        "graphene_django",
+        'stevenlsjr_blog.auth',
+        'stevenlsjr_blog.cms',
+        # "channels",
     ]
 
+    REST_FRAMEWORK = {
+        'DEFAULT_PERMISSION_CLASSES':
+        ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'],
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework.authentication.BasicAuthentication',
+            'rest_framework.authentication.SessionAuthentication',
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
+        )
+    }
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -124,7 +131,5 @@ class BaseConfig(Configuration):
     MEDIA_URL = values.Value('/media/')
     STATIC_ROOT = values.PathValue(BASE_DIR / '.static')
     MEDIA_ROOT = values.PathValue(BASE_DIR / '.media')
-    GRAPHENE = {
-        "SCHEMA": "stevenlsjr_blog.graphql.schema"
-    }
+    GRAPHENE = {"SCHEMA": "stevenlsjr_blog.graphql.schema"}
     GRAPPLE_APPS = {"home": ""}

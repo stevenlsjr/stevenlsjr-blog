@@ -21,6 +21,13 @@ from graphene_django.views import GraphQLView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
+from .routers import api_v1
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
 
 wagtail_urls = [
     re_path(r'^cms/', include(wagtailadmin_urls)),
@@ -30,6 +37,11 @@ wagtail_urls = [
 
 urlpatterns = ([
     path('admin/', admin.site.urls),
-    re_path(r"graphql", GraphQLView.as_view(graphiql=True)),
+    path('auth/', include('rest_framework.urls')),
+    path('api/v1/', include(api_v1.urls)),
+    path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    re_path(r"graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ] + wagtail_urls +
                static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
