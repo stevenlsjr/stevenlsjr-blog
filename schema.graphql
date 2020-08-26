@@ -6,11 +6,9 @@ type BlogPageNode implements Node {
   id: ID!
   title: String!
   slug: String!
-  path: String!
-  depth: Int!
-  date: Date!
+  pagePtr: WagtailPageNode!
   intro: String!
-  body: String!
+  body: GenericStreamFieldType!
 }
 
 type BlogPageNodeConnection {
@@ -23,10 +21,40 @@ type BlogPageNodeEdge {
   cursor: String!
 }
 
-scalar Date
+scalar DateTime
+
+scalar GenericStreamFieldType
+
+type IndexPageNode implements Node {
+  id: ID!
+  title: String!
+  slug: String!
+  pagePtr: WagtailPageNode!
+  intro: String!
+}
+
+type IndexPageNodeConnection {
+  pageInfo: PageInfo!
+  edges: [IndexPageNodeEdge]!
+}
+
+type IndexPageNodeEdge {
+  node: IndexPageNode
+  cursor: String!
+}
 
 interface Node {
   id: ID!
+}
+
+type PageConnection {
+  pageInfo: PageInfo!
+  edges: [PageEdge]!
+}
+
+type PageEdge {
+  node: WagtailPageNode
+  cursor: String!
 }
 
 type PageInfo {
@@ -38,17 +66,26 @@ type PageInfo {
 
 type Query {
   blogPages(id: ID!): BlogPageNode
-  allBlogPages(before: String, after: String, first: Int, last: Int, id: ID, title: String, slug: String, intro: String, path: String, path_Iexact: String, path_Istartswith: String, depth: Int, depth_Gt: Int, depth_Gte: Int): BlogPageNodeConnection
+  allBlogPages(before: String, after: String, first: Int, last: Int, id: ID, title: String, slug: String, intro: String, pagePtr: ID): BlogPageNodeConnection
+  indexPages(id: ID!): IndexPageNode
+  allIndexPages(before: String, after: String, first: Int, last: Int, id: ID, title: String, slug: String, intro: String, pagePtr: ID): IndexPageNodeConnection
   pages(id: ID!): WagtailPageNode
-  allPages(before: String, after: String, first: Int, last: Int, id: ID, contentType: ID, title: String, title_Iexact: String, title_Icontains: String, title_Contains: String, slug: String, showInMenus: Boolean): WagtailPageNodeConnection
+  allPages(before: String, after: String, first: Int, last: Int, title: String, title_Icontains: String, seoTitle: String, seoTitle_Icontains: String, slug: String, slug_Icontains: String, firstPublishedAt: DateTime, firstPublishedAt_Gt: DateTime, firstPublishedAt_Gte: DateTime, firstPublishedAt_Lte: DateTime, firstPublishedAt_Lt: DateTime, lastPublishedAt: DateTime, lastPublishedAt_Gt: DateTime, lastPublishedAt_Gte: DateTime, lastPublishedAt_Lte: DateTime, lastPublishedAt_Lt: DateTime, path: String, path_Startswith: String, depth: Int, depth_Gt: Int, depth_Gte: Int, depth_Lt: Int, depth_Lte: Int, urlPath: String, urlPath_Startswith: String, pageType: String): WagtailPageNodeConnection
 }
 
 type WagtailPageNode implements Node {
   id: ID!
   title: String!
   slug: String!
+  live: Boolean!
+  urlPath: String!
   seoTitle: String!
-  showInMenus: Boolean!
+  firstPublishedAt: DateTime
+  lastPublishedAt: DateTime
+  blogindexpage: IndexPageNode
+  blogpage: BlogPageNode
+  children(before: String, after: String, first: Int, last: Int): PageConnection
+  pageType: String
 }
 
 type WagtailPageNodeConnection {

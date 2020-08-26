@@ -22,15 +22,9 @@ class PageTypeFilter(django_filters.CharFilter):
                 'value is not a model label', value)
 
 
-class HtmlPathFilter(django_filters.CharFilter):
-    def filter(self, qs: PageQuerySet, value: str):
-        path_components = value.split('/')
-        route = Page.get_root_nodes().route(request, path_components)
-
 
 class PageFilter(django_filters.FilterSet):
     page_type = PageTypeFilter()
-    html_path = HtmlPathFilter()
 
     class Meta:
         model = Page

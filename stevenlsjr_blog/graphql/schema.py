@@ -18,7 +18,7 @@ class WagtailPageNode(DjangoObjectType):
     class Meta:
         model = Page
         fields = [
-            'id', 'title', 'seo_title', 'blogpage', 'slug',
+            'id', 'title', 'seo_title', 'blogpage', 'blogindexpage', 'slug',
             'live', 'first_published_at', 'last_published_at', 'children',
             'url_path'
         ]
@@ -50,7 +50,7 @@ class PageConnection(relay.Connection):
 class BlogPageNode(DjangoObjectType):
     class Meta:
         model = BlogPage
-        fields = ['id', 'title', 'slug', 'intro', 'page_ptr']
+        fields = ['id', 'title', 'slug', 'intro', 'page_ptr', 'body']
         filter_fields = {
             'id': ['exact'],
             'title': ['exact'],
