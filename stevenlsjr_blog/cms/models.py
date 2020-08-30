@@ -1,12 +1,13 @@
 from django.db import models
-
+from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.api import APIField
 from wagtail.core import blocks, fields
+from wagtail.core.fields import RichTextField
+from wagtail.images.fields import ImageField
 # Create your models here.
 from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField
-
-from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.search import index
+from .blocks import RichTextBlock
 
 
 class BlogIndexPage(Page):
@@ -18,10 +19,12 @@ class BlogIndexPage(Page):
 
 
 DEFAULT_BLOCK_TYPES = [
-    ('rich_text', blocks.RichTextBlock()),
+    ('rich_text', RichTextBlock()),
     ('heading', blocks.CharBlock())
 ]
-from wagtail.api import APIField
+
+
+
 
 class BlogPage(Page):
     intro = models.CharField(max_length=250)

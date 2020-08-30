@@ -8,7 +8,7 @@ class GenericStreamFieldType(Scalar):
     @staticmethod
     def serialize(stream_value: StreamValue):
         block = stream_value.stream_block
-        return block.get_api_representation(stream_value.stream_data)
+        return block.get_api_representation(stream_value)
 
 
 @convert_django_field.register(StreamField)

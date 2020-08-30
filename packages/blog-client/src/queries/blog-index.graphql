@@ -5,6 +5,13 @@ query BlogIndex($indexPath: String) {
         id
         urlPath
         pageType
+        slug
+        seoTitle
+        title
+        blogindexpage {
+          id
+          intro
+        }
         children {
           edges {
             node {

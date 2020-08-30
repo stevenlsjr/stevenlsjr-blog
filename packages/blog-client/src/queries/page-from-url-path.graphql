@@ -1,0 +1,21 @@
+
+query PageFromUrlPath($path: String){
+  allPages(urlPath: $path) {
+    edges {
+      node {
+        id
+        title
+        seoTitle
+        slug
+        lastPublishedAt
+        blogindexpage {
+          intro
+        }
+        blogpage {
+          intro
+          body
+        }
+      }
+    }
+  }
+}
