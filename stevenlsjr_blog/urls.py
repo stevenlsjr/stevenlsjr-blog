@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from graphene_django.views import GraphQLView
 from wagtail.admin import urls as wagtailadmin_urls
-from wagtail.core import urls as wagtail_urls
+from wagtail.core import urls as base_wagtail_urls
 from wagtail.images.views.serve import ServeView
 from wagtail.documents import urls as wagtaildocs_urls
 from .routers import api_v1, api_wagtail_v2
@@ -27,10 +27,12 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView, TokenVerifyView)
 
+from grapple import urls as grapple_urls
+
 wagtail_urls = [
     re_path(r'^cms/', include(wagtailadmin_urls)),
     re_path(r'^documents/', include(wagtaildocs_urls)),
-    re_path(r'^pages/', include(wagtail_urls)),
+    re_path(r'^pages/', include(base_wagtail_urls)),
 ]
 
 urlpatterns = ([
@@ -47,7 +49,7 @@ urlpatterns = ([
     path('api/v1/token/verify/',
          TokenVerifyView.as_view(),
          name='token_verify'),
-    re_path(r"graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    re_path(r"", include(grapple_urls)),
     re_path(r'^images/([^/]*)/(\d*)/([^/]*)/[^/]*$',
             ServeView.as_view(),
             name='wagtailimages_serve'),

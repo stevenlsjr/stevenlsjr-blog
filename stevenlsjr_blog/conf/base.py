@@ -43,6 +43,7 @@ class BaseConfig(Configuration):
         'taggit',
         'wagtail.api.v2',
         'rest_framework',
+        "grapple",
         "graphene_django",
         'stevenlsjr_blog.auth',
         'stevenlsjr_blog.cms',
@@ -135,5 +136,6 @@ class BaseConfig(Configuration):
     MEDIA_URL = values.Value('/media/')
     STATIC_ROOT = values.PathValue(BASE_DIR / '.static')
     MEDIA_ROOT = values.PathValue(BASE_DIR / '.media')
-    GRAPHENE = {"SCHEMA": "stevenlsjr_blog.graphql.schema"}
-    GRAPPLE_APPS = {"home": ""}
+    GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
+    GRAPPLE_APPS = { "stevenlsjr_cms": ""}
+    BASE_URL = values.URLValue('http://localhost:8000')
