@@ -43,8 +43,8 @@ class BaseConfig(Configuration):
         'taggit',
         'wagtail.api.v2',
         'rest_framework',
-        "grapple",
         "graphene_django",
+        "grapple",
         'stevenlsjr_blog.auth',
         'stevenlsjr_blog.cms',
         # "channels",
@@ -132,6 +132,17 @@ class BaseConfig(Configuration):
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+    DEFAULT_FILE_STORAGE =  values.Value('django.core.files.storage.FileSystemStorage')
+    STATICFILES_STORAGE = values.Value('django.contrib.staticfiles.storage.StaticFilesStorage')
+
+
+    AZURE_ACCOUNT_NAME = values.Value()
+    AZURE_ACCOUNT_KEY = values.SecretValue()
+    AZURE_CONTAINER = values.Value()
+    PUBLIC_AZURE_CONTAINER = values.Value()
+    AZURE_CONNECTION_STRING = values.Value(default=None)
+    AZURE_CUSTOM_CONNECTION_STRING = values.Value(default=None)
+    PUBLIC_AZURE_CONTAINER = values.Value()
     STATIC_URL = values.Value('/static/')
     MEDIA_URL = values.Value('/media/')
     STATIC_ROOT = values.PathValue(BASE_DIR / '.static')
